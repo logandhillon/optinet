@@ -18,7 +18,7 @@ class Sequencer:
         return seqs
 
     @staticmethod
-    def _565s_to_bytes(seqs: List[Tuple[int]]):
+    def _565s_to_bytes(seqs: List[Tuple[int, int, int]]):
         out = bytearray()
 
         for seq in seqs:
