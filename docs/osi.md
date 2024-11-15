@@ -2,17 +2,64 @@
 
 # Optinet OSI model
 
+Only contains the low-level protocols that make the system work. (layers 1-4)
+
 ## Physical Layer (L1)
 
-Input: camera or other light sensor.
+Prepares frames for transmission over a physical medium.
 
-Output: screen or other light emmitter.
+**Input:** camera or other light sensor. reads hex code from colour.
 
-Protocols that use the spectral sequencer must support colour on I/O layer 1.
+**Output:** screen or other light emmitter. displays hex code as a colour.
 
 ## Data Link Layer (L2)
 
-## Spectral sequencer (5-6-5)
+Responsible for framing, addressing, and error detection.
+
+### OCP: Optinet Control Protocol
+
+- Adds header: source and destination addresses to each frame
+- Adds trailer: CRC error-checking byte
+
+### Addresses
+
+Optinet addresses are 16-bit addresses (or one colour code)
+
+- Byte notation: [\x00, \xff]
+- Text notation: 00ff
+
+## Network Layer (L3)
+
+Since Optinet is a broadcast network, nothing happens in the network layer.
+
+## Transport Layer (L4)
+
+Handles segmentation, flow control, and error recovery.
+
+### GTP/OCP: Governed Transport Protocol
+
+- The sender sends each packet in order
+- The receiver checks the order of the packets
+  - If there is a lost packet, asks for a retransmission (ENQ)
+  - Otherwise, sends ACK and the sender sends the next packet
+
+### SCP/OCP: Simple Communication Protocol
+
+The sender continuously sends packets without caring about packet loss.
+
+## Session layer (L5)
+
+Sessions are not implemented in Optinet.
+
+## Presentation Layer (L6)
+
+### 1. Binary sequencer
+
+Transforms the bytes into a binary sequence
+
+**Example:** `"AB"` (ASCII 65, 66 &rarr; 0b01000001, 0b01000010 &rarr; 0100000101000010)
+
+### 2. Spectral sequencer (5-6-5)
 
 Transforms the bytes into a color sequence using 5-6-5 RGB encoding.
 
@@ -47,36 +94,10 @@ Only 2 bytes can be stored in one color.
 
 ∴ `#422810` = `65, 66` &rarr; `ASCII A, B` &rarr; `"AB"`
 
-## Binary sequencer
-
-Transforms the bytes into a binary sequence
-
-**Example:** `"AB"` (ASCII 65, 66 &rarr; 0b01000001, 0b01000010 &rarr; 0100000101000010)
-
-## Network Layer (L3)
-
-Handles routing and forwarding of data between networks.
-Protocols: IP (Internet Protocol), ICMP (for error reporting like ping), OSPF.
-
-## Transport Layer (L4)
-
-Ensures reliable data transfer between systems.
-Protocols: TCP (Transmission Control Protocol), UDP (User Datagram Protocol).
-
-## Session Layer (L5)
-
-Manages sessions between applications.
-Rarely used as a distinct layer in modern networking.
-
-## Presentation Layer (L6)
-
-Handles data formatting, encryption, and compression.
-Protocols: SSL/TLS for encryption, which is used by HTTPS.
-
 ## Application Layer (L7)
 
-Provides services for user-facing applications.
-Protocols: HTTP, HTTPS, FTP, SMTP, DNS.
+This is where data originates in a human-readable or application-specific format.
 
-OP address
-its a colour yeah thats it fire ???
+For example, sending "Hello, world!" as text.
+
+Traditional network protocols as we know would go here.
