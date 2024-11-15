@@ -2,8 +2,6 @@
 
 # Optinet OSI model
 
-Only contains the low-level protocols that make the system work. (layers 1-4)
-
 ## Physical Layer (L1)
 
 Prepares frames for transmission over a physical medium.
@@ -30,7 +28,7 @@ Optinet addresses are 16-bit addresses (or one colour code)
 
 ## Network Layer (L3)
 
-Since Optinet is a broadcast network, nothing happens in the network layer.
+Optinet is a broadcast network. All packets are networked to all devices.
 
 ## Transport Layer (L4)
 
